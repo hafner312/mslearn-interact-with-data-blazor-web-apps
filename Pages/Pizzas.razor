@@ -1,0 +1,16 @@
+@page "/pizzas"
+@using BlazingPizza.Data
+@inject PizzaSerivice PizzaSvc
+
+<h1>Choose your pizza</h1>
+
+<p>We have all these delicious recipes:</p>
+
+@code {
+    private Pizza[] pizzas;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        todaysPizzas = await PizzaSvc.GetTodaysSpecialsAsync();
+    }
+}
