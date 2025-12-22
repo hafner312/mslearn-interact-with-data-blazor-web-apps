@@ -4,33 +4,47 @@
 
 <div class="main">
     <h1>Blazing Pizzas</h1>
-
-    @if (specials == null) 
+    <ul class="pizza-cards">
+    @if (specials != null)
     {
-        <p>We're finding out what pizzas are available today...</p>
+        @foreach (var special in specials)
+        {
+          <li @onclick="@(() => ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
+            <div class="pizza-info">
+            <span class="title">@special.Name</span>
+            @special.Description
+            <span class="price">@special.GetFormattedBasePrice()</span>
+            </div>
+          </li>
+        }
     }
-    else 
-    {
-        <ul class="pizza-cards">
-            @foreach (var special in specials!)
-            {
-                <li style="background-image: url('@special.ImageUrl')">
-                    <div class="pizza-info">
-                        <span class="title">@special.Name</span>
-                        @special.Description
-                        <span class="price">@special.GetFormattedBasePrice()</span>
-                    </div>
-                </li>
-            }
-        </ul>
-    }
+    </ul>
 </div>
 
-@code {
-    List<PizzaSpecial>? specials;
+@if (showingConfigureDialog)
+{
+    <ConfigurePizzaDialog Pizza="configuringPizza" />
+}
 
-protected override async Task OnInitializedAsync()
+@code {
+    List<PizzaSpecial> specials = new();
+    Pizza configuringPizza;
+    bool showingConfigureDialog;
+
+    protected override async Task OnInitializedAsync()
     {
         specials = await HttpClient.GetFromJsonAsync<List<PizzaSpecial>>(NavigationManager.BaseUri + "specials");
+    }
+
+    void ShowConfigurePizzaDialog(PizzaSpecial special)
+    {
+        configuringPizza = new Pizza()
+        {
+            Special = special,
+            SpecialId = special.Id,
+            Size = Pizza.DefaultSize
+        };
+
+        showingConfigureDialog = true;
     }
 }

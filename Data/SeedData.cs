@@ -6,7 +6,7 @@ public static class SeedData
     {
         var specials = new PizzaSpecial[]
         {
-            new PizzaSpecial()
+            new PizzaSpecial()         
             {
                 Name = "Basic Cheese Pizza",
                 Description = "It's cheesy and delicious. Why wouldn't you want one?",
