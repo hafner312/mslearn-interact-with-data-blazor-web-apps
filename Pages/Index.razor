@@ -6,14 +6,19 @@
 @inject OrderState OrderState
 
 <div class="top-bar">
-    <a class="logo" href="">
+    <NavLink class="logo" href="/">
         <img src="img/logo.svg" />
-    </a>
+    </NavLink>
 
-    <a href="" class="nav-tab active" >
+    <NavLink href="/" class="nav-tab" Match="NavLinkMatch.All">
         <img src="img/pizza-slice.svg" />
         <div>Get Pizza</div>
-    </a>    
+    </NavLink>
+
+    <NavLink href="/myorders" class="nav-tab">
+        <img src="img/bike.svg" />
+        <div>My Orders</div>
+    </NavLink>
 </div>
 
 <div class="main">
@@ -57,27 +62,36 @@
 
             @foreach (var configuredPizza in order.Pizzas)
             {
-              <div class="cart-item">
-                  <div class="title">@(configuredPizza.Size)" @configuredPizza.Special.Name</div>
-                  <div class="item-price">
-                      @configuredPizza.GetFormattedTotalPrice()
-                  </div>
-                  <a @onclick="@(() => OrderState.RemoveConfiguredPizza(configuredPizza))" class="delete-item">x</a>
-              </div>
+                <div class="cart-item">
+                    <div class="title">
+                        @(configuredPizza.Size)" @configuredPizza.Special.Name
+                    </div>
+                    <div class="item-price">
+                        @configuredPizza.GetFormattedTotalPrice()
+                    </div>
+                    <a @onclick="@(() => OrderState.RemoveConfiguredPizza(configuredPizza))"
+                       class="delete-item">x</a>
+                </div>
             }
         </div>
     }
     else
     {
-        <div class="empty-cart">Choose a pizza<br>to get started</div>
+        <div class="empty-cart">
+            Choose a pizza<br />to get started
+        </div>
     }
 
     <div class="order-total @(order.Pizzas.Any() ? "" : "hidden")">
         Total:
         <span class="total-price">@order.GetFormattedTotalPrice()</span>
-        <a href="checkout" class="@(OrderState.Order.Pizzas.Count == 0 ? "btn btn-warning disabled" : "btn btn-warning")">
-            Order >
-        </a>
+
+        <NavLink href="/checkout"
+                 class="@(OrderState.Order.Pizzas.Count == 0
+                          ? "btn btn-warning disabled"
+                          : "btn btn-warning")">
+            Order &gt;
+        </NavLink>
     </div>
 </div>
 
