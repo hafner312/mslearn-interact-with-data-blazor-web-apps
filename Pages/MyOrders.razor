@@ -41,16 +41,18 @@
                         Total price:
                         <strong>£@item.Order.GetFormattedTotalPrice()</strong>
                     </div>
+
                     <div class="col">
                         Status: <strong>@item.StatusText</strong>
                     </div>
+
                     @if (item.StatusText != "Delivered")
                     {
                         <div class="col flex-grow-0">
-                            <NavLink href="myorders/@item.Order.OrderId" class="btn btn-success">
+                            <a href="myorders/@item.Order.OrderId" class="btn btn-success">
                                 Track &gt;
-                            </NavLink> 
-                        </div> 
+                            </a>
+                        </div>
                     }
                 </div>
             }
