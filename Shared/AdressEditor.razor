@@ -1,3 +1,6 @@
+@using BlazingPizza.Model
+@namespace BlazingPizza.Shared
+
 <div class="form-field">
     <label>Name:</label>
     <div>
@@ -41,5 +44,6 @@
 </div>
 
 @code {
-    [Parameter] public Address Address { get; set; }
+    [Parameter]
+    public Address Address { get; set; }
 }
