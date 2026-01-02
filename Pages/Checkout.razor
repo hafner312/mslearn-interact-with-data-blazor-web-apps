@@ -8,23 +8,24 @@
 @inject NavigationManager NavigationManager
 
 <div class="main">
-    <div class="checkout-cols">
-        <div class="checkout-order-details">
-            <h4>Review order</h4>
-            <OrderReview Order="Order" />
+    <EditForm Model="Order.DeliveryAddress" OnSubmit="CheckSubmission">
+        <div class="checkout-cols">
+            <div class="checkout-order-details">
+                <h4>Review order</h4>
+                <OrderReview Order="Order" />
+            </div>
+
+            <div class="checkout-delivery-address">
+                <h4>Deliver to...</h4>
+                <AdressEditor Address="Order.DeliveryAddress" />
+            </div>
         </div>
 
-        <div class="checkout-delivery-address">
-            <h4>Deliver to...</h4>
-            <AdressEditor Address="Order.DeliveryAddress" />
-        </div>
-    </div>
-
-    <button class="checkout-button btn btn-warning"
-            @onclick="PlaceOrder"
-            disabled="@isSubmitting">
-        Place order
-    </button>
+        <button class="checkout-button btn btn-warning"
+                disabled="@isSubmitting">
+            Place order
+        </button>
+    </EditForm>
 </div>
 
 @code {
@@ -36,10 +37,15 @@
         Order.DeliveryAddress ??= new Address();
     }
 
-    async Task PlaceOrder()
+    private async Task CheckSubmission()
     {
         isSubmitting = true;
+        await PlaceOrder();
+        isSubmitting = false;
+    }
 
+    async Task PlaceOrder()
+    {
         var response = await HttpClient.PostAsJsonAsync(
             $"{NavigationManager.BaseUri}orders",
             Order);
